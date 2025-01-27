@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="main.ts" type="NodeJSConfigurationType" focusToolWindowBeforeRun="true" nameIsGenerated="true" path-to-js-file="main.ts" show_console_on_std_err="true" show_console_on_std_out="true" typescript-loader="bundled" working-dir="$PROJECT_DIR$">
+    <EXTENSION ID="com.intellij.lang.javascript.buildTools.npm.rc.StartBrowserRunConfigurationExtension">
+      <browser name="98ca6316-2f89-46d9-a9e5-fa9e2b0625b3" start="true" with-js-debugger="true" url="http://localhost:63342/new/index.html" />
+    </EXTENSION>
+    <method v="2">
+      <option name="TypeScript.Before.Run" enabled="true" FAIL_ON_ERROR="true" CONFIG_PATH="$PROJECT_DIR$/tsconfig.json" />
+    </method>
+  </configuration>
+</component>

@@ -1,0 +1,20 @@
+{
+  "name": "new",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "canvas": "^3.1.0",
+    "electron": "^34.0.0",
+    "new": "file:"
+  },
+  "devDependencies": {
+    "eslint": "^9.18.0",
+    "typescript": "^5.7.3"
+  }
+}

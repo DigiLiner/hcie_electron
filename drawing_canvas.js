@@ -199,6 +199,16 @@ function finishDrawing() {
 }
 function selectTool(tool) {
     g.current_tool = tool;
+    const sliderRadius = document.getElementById("sliderContainerRadius");
+    const sliderDensity = document.getElementById("sliderContainerDensity");
+    if (g.current_tool === Tool.Spray) {
+        sliderRadius.style.display = 'flex';
+        sliderDensity.style.display = 'flex';
+    }
+    else {
+        sliderRadius.style.display = 'none';
+        sliderDensity.style.display = 'none';
+    }
     clearSelected();
     let e = document.getElementById(tool.id);
     if (e === null) {

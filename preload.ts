@@ -11,7 +11,7 @@ contextBridge.exposeInMainWorld('darkMode', {
 
 contextBridge.exposeInMainWorld('electronAPI', {
     openFile: () => ipcRenderer.invoke('open-file'),
-    saveFile: (dataURL:string) => ipcRenderer.invoke('save-file',dataURL)
+    saveFile: (dataURL:string,filePath:string,saveas:boolean) => ipcRenderer.invoke('save-file',dataURL,filePath,saveas),
     //openFile func used in renderer
     //open-file used in main
 })

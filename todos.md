@@ -1,9 +1,9 @@
 #todo : 
 
 ### PRIORITY 1
-UNDO/REDO functionality
+~~UNDO/REDO functionality~~
 ZOOM IN/OUT functionality
-OPEN/SAVE functionality
+~~OPEN/SAVE functionality~~
 basic drawing functionality -ok
 - [ ] FLOOD FILL
 - [ ] ERASER

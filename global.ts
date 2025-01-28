@@ -84,6 +84,8 @@ class g {
     static erasing = false;
     static counter = 0;
     static undo_index=-1;
+    //file location on disk
+    static filepath ="";
 }
 
 

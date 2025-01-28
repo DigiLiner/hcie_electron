@@ -223,6 +223,18 @@ function finishDrawing() {
 
 function selectTool(tool: Tool) {
     g.current_tool = tool;
+    const sliderRadius:HTMLDivElement = document.getElementById("sliderContainerRadius") as HTMLDivElement;
+    const sliderDensity:HTMLDivElement = document.getElementById("sliderContainerDensity") as HTMLDivElement;
+
+    if (g.current_tool===Tool.Spray) {
+        sliderRadius.style.display='flex';
+        sliderDensity.style.display='flex';
+    }
+    else
+    {
+        sliderRadius.style.display='none';
+        sliderDensity.style.display='none';
+    }
     clearSelected();
 
     let e = document.getElementById(tool.id);

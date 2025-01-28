@@ -1,10 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
     stdSlider('sliderContainerWidth',1,100,1);
-    stdSlider('sliderContainerRadius',2,300,50);
-    stdSlider('sliderContainerDensity',20,300,100);
     stdSlider('sliderContainerOpacity',0,100,100);
-    stdSlider('sliderContainerBlur',0,30,2);
-    barSlider('test',50,100,50);
+    stdSlider('sliderContainerBlur',0,30,2);//todo: change as hardness 0-100%
+    stdSlider('sliderContainerRadius',2,300,50,'none');
+    stdSlider('sliderContainerDensity',20,300,100,'none');
+
+   // barSlider('test',50,100,50);
 })
 
 
@@ -80,12 +81,13 @@ s.backgroundColor='#aaa';
 }
 
 
-function stdSlider(id:string, min=1, max=100, value=50) {
+function stdSlider(id:string, min=1, max=100, value=50,display='flex') {
 // Create slider container
     const sliderContainer: HTMLDivElement = document.getElementById(id)as HTMLDivElement;
-    sliderContainer.style.display = 'flex';
     sliderContainer.style.alignItems = 'center';
     sliderContainer.style.marginTop = '0px';
+    sliderContainer.style.width = '140px';
+    sliderContainer.style.display = display;
     // Create minus button
     const minusButton = document.createElement('button');
     minusButton.textContent = '-';
@@ -99,6 +101,7 @@ function stdSlider(id:string, min=1, max=100, value=50) {
     slider.max = max.toString();
     slider.value = value.toString();
     slider.style.marginRight = '0px';
+    slider.style.width='80px';
     sliderContainer.appendChild(slider);
 
     // Create value display

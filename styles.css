@@ -1,6 +1,8 @@
 .div-toolbox { /* toolbox container left*/
   display: inline-block;
   position: sticky;
+  justify-content: left;
+  justify-items: left;
   width: 40px;
   height: 100%;
   padding: 0;
@@ -51,19 +53,58 @@
 
 .div-toolbar { /* top toolbar container */
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   padding: 1px;
-  background-color: #ddd;
+  background-color: transparent;
   border-bottom: 1px solid #ccc;
   -webkit-user-select: none; /* Chrome all / Safari all */
   -moz-user-select: none; /* Firefox all */
   -ms-user-select: none; /* IE 10+ */
 }
+.div-toolbar .button {
+  border: none;
+  background-color: transparent;
+  width: 32px;
+  height: 32px;
+  transition: background-color 0.1s ease;
+  display: compact;
+  margin: 1px;
+  padding: 1px;
+  -webkit-user-select: none; /* Chrome all / Safari all */
+  -moz-user-select: none; /* Firefox all */
+  -ms-user-select: none; /* IE 10+ */
+}
+.div-toolbar .button > img {
+  width: 24px;
+  height: 24px;
+  margin-top: 2px;
+}
+.div-toolbar .button:hover {
+  background-color: rgba(194, 227, 254, 0.89);
+  border: 1px solid rgb(44, 101, 112);
+}
+.div-toolbar .button:active {
+  background-color: rgba(205, 248, 255, 0.62);
+}
+.div-toolbar .button.down {
+  background-color: rgb(142, 231, 255);
+  border: 1px solid #808080;
+  transition: background-color 0.8s ease;
+}
+.div-toolbar .button .unselectable {
+  -webkit-user-select: none; /* Chrome all / Safari all */
+  -moz-user-select: none; /* Firefox all */
+  -ms-user-select: none; /* IE 10+ */
+  /* No support for these yet, use at own risk */
+  -o-user-select: none;
+  user-select: none;
+}
 
 .slider-container {
   background-color: #ddd;
   border: 1px solid #ccc;
+  display: flex;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -120,6 +161,15 @@
   top: var(--canvas-top);
   background-image: url("checker.png");
   background-repeat: repeat;
+}
+
+#unselectable {
+  -webkit-user-select: none; /* Chrome all / Safari all */
+  -moz-user-select: none; /* Firefox all */
+  -ms-user-select: none; /* IE 10+ */
+  /* No support for these yet, use at own risk */
+  -o-user-select: none;
+  user-select: none;
 }
 
 /*# sourceMappingURL=styles.css.map */

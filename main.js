@@ -4,7 +4,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const main_menu_1 = __importDefault(require("./main_menu"));
-const { createCanvas, loadImage } = require("canvas");
 const electron_1 = __importDefault(require("electron"));
 const url_1 = __importDefault(require("url"));
 const node_path_1 = __importDefault(require("node:path"));
@@ -12,18 +11,23 @@ const { app, BrowserWindow, Menu, ipcMain, nativeTheme, dialog } = electron_1.de
 const fs_1 = __importDefault(require("fs"));
 // @ts-ignore
 let mainWindow;
+app.commandLine.appendSwitch('high-dpi-support', '1');
+app.commandLine.appendSwitch('force-device-scale-factor', '1');
 //import mainMenuTemplate from './main_menu';
 app.on('ready', function () {
+    // @ts-ignore
     mainWindow = new BrowserWindow({
-        width: 500,
-        height: 500,
-        x: 0,
-        y: 150,
+        minWidth: 1000,
+        minHeight: 800,
+        width: 1200,
+        height: 900,
+        // x: 0,
+        // y: 150,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: true,
-            preload: node_path_1.default.join(__dirname, 'preload.js'),
-        }
+            preload: node_path_1.default.join(__dirname, 'preload.js'), //disable dpi scaling
+        },
     });
     mainWindow.loadURL(url_1.default.format({
         pathname: node_path_1.default.join(__dirname, 'index.html'),
@@ -34,20 +38,23 @@ app.on('ready', function () {
 // @ts-ignore
 const mainMenu = Menu.buildFromTemplate(main_menu_1.default);
 Menu.setApplicationMenu(mainMenu);
+//region theme
+/*
 ipcMain.handle('dark-mode:toggle', () => {
     if (nativeTheme.shouldUseDarkColors) {
-        nativeTheme.themeSource = 'light';
+        nativeTheme.themeSource = 'light'
+    } else {
+        nativeTheme.themeSource = 'dark'
     }
-    else {
-        nativeTheme.themeSource = 'dark';
-    }
-    return nativeTheme.shouldUseDarkColors;
-});
+    return nativeTheme.shouldUseDarkColors
+})
+
 ipcMain.handle('dark-mode:system', () => {
-    nativeTheme.themeSource = 'system';
-});
+    nativeTheme.themeSource = 'system'
+})*/
+//endregion
 app.whenReady().then(() => {
-    //OPEN DIALOG
+    //region open file dialog
     ipcMain.handle('open-file', async () => {
         const { canceled, filePaths } = await dialog.showOpenDialog({
             properties: ['openFile'] //defined in preload
@@ -60,29 +67,28 @@ app.whenReady().then(() => {
             return "Dosya seçilmedi!"; //send to renderer
         }
     });
-    //END OPEN DIALOG
-    //SAVE DIALOG
-    ipcMain.handle('save-file', async (event, dataURL) => {
-        const { canceled, filePath } = await dialog.showSaveDialog({});
-        if (!canceled) {
-            node_path_1.default.join(filePath);
-            console.log(dataURL);
-            const base64Data = dataURL.replace(/^data:image\/png;base64,/, '');
-            // Dosyayı kaydedin
-            fs_1.default.writeFile(filePath, base64Data, 'base64', (err) => {
-                if (err) {
-                    console.error('Resim kaydedilirken hata oluştu:', err);
-                }
-                else {
-                    console.log('Resim başarıyla kaydedildi:', filePath);
-                }
-            });
+    //endregion
+    //region save file dialog
+    ipcMain.handle('save-file', async (event, dataURL, imagePath, saveas = false) => {
+        if (!imagePath || saveas) {
+            const { canceled, filePath } = await dialog.showSaveDialog({});
+            if (!canceled) { }
+            imagePath = filePath;
         }
-        else {
-            return "Dosya seçilmedi!"; //send to renderer
-        }
-        // END SAVE DIALOG
+        node_path_1.default.join(imagePath);
+        console.log(dataURL);
+        const base64Data = dataURL.replace(/^data:image\/png;base64,/, '');
+        // Dosyayı kaydedin
+        fs_1.default.writeFile(imagePath, base64Data, 'base64', (err) => {
+            if (err) {
+                console.error('Resim kaydedilirken hata oluştu:', err);
+            }
+            else {
+                console.log('Resim başarıyla kaydedildi:', imagePath);
+            }
+        });
     });
+    //endregion
     app.on('window-all-closed', () => {
         if (process.platform !== 'darwin') {
             app.quit();

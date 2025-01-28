@@ -87,6 +87,8 @@ g.tool_icon_size = '24px';
 g.erasing = false;
 g.counter = 0;
 g.undo_index = -1;
+//file location on disk
+g.filepath = "";
 class layer_class {
     constructor() {
         this.canvas = new OffscreenCanvas(g.image_width, g.image_height);

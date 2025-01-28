@@ -1,5 +1,5 @@
 "use strict";
-//THEMES
+//region THEMES
 // @ts-ignore
 document.getElementById('toggle-dark-mode').addEventListener('click', async () => {
     // @ts-ignore
@@ -14,8 +14,8 @@ document.getElementById('reset-to-system').addEventListener('click', async () =>
     // @ts-ignore
     document.getElementById('theme-source').innerHTML = 'System';
 });
-// END THEMES
-// OPEN DIALOG
+//endregion
+//region OPEN DIALOG
 //@ts-ignore
 const btn = document.getElementById('btn-open');
 const filePathElement = document.getElementById('filePath');
@@ -27,19 +27,35 @@ btn.addEventListener('click', async () => {
     const el = document.getElementById('filePath');
     //@ts-ignore
     el.innerText = filePath;
+    g.filepath = filePath;
     openImage(filePath); // In drawing_canvas
 });
-// END OPEN DIALOG
-//SAVE DIALOG
+//endregion
+//region SAVE DIALOG
 const btnsave = document.getElementById('btn-save');
 //@ts-ignore
 btnsave.addEventListener('click', async () => {
     const dataURL = getCanvasImageDataURL();
     console.log(dataURL);
     if (dataURL) {
-        await api.saveFile(dataURL);
+        await api.saveFile(dataURL, g.filepath, false);
     }
     else {
         console.error('Canvas resmi alınamadı.');
     }
 });
+//endregion
+//region SAVE AS DIALOG
+const btnsaveas = document.getElementById('btn-save-as');
+//@ts-ignore
+btnsave.addEventListener('click', async () => {
+    const dataURL = getCanvasImageDataURL();
+    console.log(dataURL);
+    if (dataURL) {
+        await api.saveFile(dataURL, g.filepath, true);
+    }
+    else {
+        console.error('Canvas resmi alınamadı.');
+    }
+});
+//endregion

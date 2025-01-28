@@ -8,7 +8,7 @@ contextBridge.exposeInMainWorld('darkMode', {
 //OPEN FILE DIALOG
 contextBridge.exposeInMainWorld('electronAPI', {
     openFile: () => ipcRenderer.invoke('open-file'),
-    saveFile: (dataURL) => ipcRenderer.invoke('save-file', dataURL)
+    saveFile: (dataURL, filePath, saveas) => ipcRenderer.invoke('save-file', dataURL, filePath, saveas),
     //openFile func used in renderer
     //open-file used in main
 });

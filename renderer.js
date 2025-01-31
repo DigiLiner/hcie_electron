@@ -48,7 +48,7 @@ btnsave.addEventListener('click', async () => {
 //region SAVE AS DIALOG
 const btnsaveas = document.getElementById('btn-save-as');
 //@ts-ignore
-btnsave.addEventListener('click', async () => {
+btnsaveas.addEventListener('click', async () => {
     const dataURL = getCanvasImageDataURL();
     console.log(dataURL);
     if (dataURL) {

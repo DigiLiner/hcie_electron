@@ -14,12 +14,12 @@ app.on('ready', function () {
 
     // @ts-ignore
     mainWindow = new BrowserWindow({
-        minWidth:1000,
-        minHeight:800,
+        minWidth: 1000,
+        minHeight: 800,
         width: 1200,
         height: 900,
-       // x: 0,
-       // y: 150,
+        // x: 0,
+        // y: 150,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: true,
@@ -70,26 +70,35 @@ app.whenReady().then(() => {
 //endregion
 //region save file dialog
 
-    ipcMain.handle('save-file', async (event, dataURL: string,imagePath:string,saveas:boolean=false) => {
-        if (!imagePath || saveas) {
-        const {canceled, filePath} = await dialog.showSaveDialog({});
-        if (!canceled) {}
-            imagePath = filePath;}
+
+    ipcMain.handle('save-file', async (event, dataURL, imagePath, saveas = false) => {
+        try {
+            if (!imagePath || saveas) {
+                const {canceled, filePath} = await dialog.showSaveDialog({});
+                if (canceled) {
+                    console.log('Save dialog was canceled.');
+                    return;
+                }
+                imagePath = filePath;
+            }
 
             path.join(imagePath);
             console.log(dataURL);
             const base64Data = dataURL.replace(/^data:image\/png;base64,/, '');
-
-            // Dosyayı kaydedin
-            fs.writeFile(imagePath, base64Data, 'base64', (err) => {
+            const fullPath = path.join(imagePath);
+    
+            fs.writeFile(fullPath, base64Data, 'base64', (err) => {
                 if (err) {
-                    console.error('Resim kaydedilirken hata oluştu:', err);
+                    console.error('Error saving image:', err);
                 } else {
-                    console.log('Resim başarıyla kaydedildi:', imagePath);
+                    console.log('Image saved successfully:', fullPath);
                 }
             });
+        } catch (error) {
+            console.error('An error occurred:', error);
+        }
+    });
 
-    })
     //endregion
     app.on('window-all-closed', () => {
         if (process.platform !== 'darwin') {

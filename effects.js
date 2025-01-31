@@ -16,11 +16,11 @@ function applySepiaEffect(zoomCtx) {
     zoomCtx.putImageData(imageData, 0, 0);
 }
 function applyBlurEffect() {
-    const zoomCanvas = document.getElementById('zoomCanvas');
+    const zoomCanvas = document.getElementById("zoomCanvas");
     if (zoomCanvas === null) {
         return false;
     }
-    const zoomCtx = zoomCanvas.getContext('2d');
+    const zoomCtx = zoomCanvas.getContext("2d");
     if (zoomCtx === null) {
         return false;
     }
@@ -30,11 +30,13 @@ function applyBlurEffect() {
         for (let x = 1; x < zoomCanvas.width - 1; x++) {
             for (let c = 0; c < 3; c++) {
                 const i = (y * zoomCanvas.width + x) * 4 + c;
-                data[i] = (data[i] +
-                    data[i - 4] +
-                    data[i + 4] +
-                    data[i - zoomCanvas.width * 4] +
-                    data[i + zoomCanvas.width * 4]) / 5;
+                data[i] =
+                    (data[i] +
+                        data[i - 4] +
+                        data[i + 4] +
+                        data[i - zoomCanvas.width * 4] +
+                        data[i + zoomCanvas.width * 4]) /
+                        5;
             }
         }
     }

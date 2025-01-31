@@ -1,21 +1,30 @@
 //Tool class for tool constants
 class Tool {
-    public static readonly Line = new Tool("Line", "btn-line",true);
-    public static readonly Circle = new Tool("Circle", "btn-circle",true);
-    public static readonly Rectangle = new Tool("Rectangle", "btn-rect",true);
-    public static readonly Pen = new Tool("Pen", "btn-pen",true);
-    public static readonly Brush = new Tool("Brush", "btn-brush",true);
-    public static readonly Spray = new Tool("Spray", "btn-spray",true);
-    public static readonly Flood_Fill = new Tool("Flood Fill", "btn-flood-fill",true);
-    public static readonly Eraser = new Tool("Eraser", "btn-eraser",true);
-    public static readonly Eye_Dropper = new Tool("Eye Dropper", "btn-eye-dropper",true);
-    public static readonly Text = new Tool("Text", "btn-text",true);
-    public static readonly Zoom_In = new Tool("Zoom In", "btn-zoom-in",false);
-    public static readonly Zoom_Out = new Tool("Zoom Out", "btn-zoom-out",false);
-    public static readonly Undo = new Tool("Undo", "btn-undo",false);
-    public static readonly Redo = new Tool("Redo", "btn-redo",false);
+    public static readonly Line = new Tool("Line", "btn-line", true);
+    public static readonly Circle = new Tool("Circle", "btn-circle", true);
+    public static readonly Rectangle = new Tool("Rectangle", "btn-rect", true);
+    public static readonly Pen = new Tool("Pen", "btn-pen", true);
+    public static readonly Brush = new Tool("Brush", "btn-brush", true);
+    public static readonly Spray = new Tool("Spray", "btn-spray", true);
+    public static readonly Flood_Fill = new Tool(
+        "Flood Fill",
+        "btn-flood-fill",
+        true
+    );
+    public static readonly Eraser = new Tool("Eraser", "btn-eraser", true);
+    public static readonly Eye_Dropper = new Tool(
+        "Eye Dropper",
+        "btn-eye-dropper",
+        true
+    );
+    public static readonly Text = new Tool("Text", "btn-text", true);
+    public static readonly Zoom_In = new Tool("Zoom In", "btn-zoom-in", false);
+    public static readonly Zoom_Out = new Tool("Zoom Out", "btn-zoom-out", false);
+    public static readonly Undo = new Tool("Undo", "btn-undo", false);
+    public static readonly Redo = new Tool("Redo", "btn-redo", false);
 
-    constructor(public name: string, public id: string,public toggle:boolean) {}
+    constructor(public name: string, public id: string, public toggle: boolean) {
+    }
 
     toString(): string {
         return this.name;
@@ -32,18 +41,19 @@ class Tool {
             Tool.Flood_Fill,
             Tool.Eraser,
             Tool.Eye_Dropper,
-            Tool.Text           
+            Tool.Text,
         ];
     }
 }
-// Class for global variables
+
+/// Class for global variables
 class g {
     //flag for drawing on canvas true/false
     static drawing = false;
     //current tool for drawing string= line, circle, rect, pen, brush, spray, fill
     static current_tool = Tool.Pen;
     //color of pencil
-    static pen_color = "black";
+    static pen_color = '#000000';
     //width of pencil
     static pen_width = 10;
     //Opacity of pencil 0-Transparent to 1-Opaque
@@ -65,7 +75,7 @@ class g {
     //density of spray tool
     static spray_density = 100;
     //Start position X of mouse
-    static startX = 0
+    static startX = 0;
     //Start position Y of mouse
     static startY = 0;
     //Zoom factor of canvas
@@ -79,26 +89,36 @@ class g {
     //flag for zooming true/false
     static zooming = false;
     //tool icon size
-    static tool_icon_size = '24px';
+    static tool_icon_size = "24px";
     //flag for erasing true/false
     static erasing = false;
     static counter = 0;
-    static undo_index=-1;
+    static undo_index = -1;
     //file location on disk
-    static filepath ="";
+    static filepath = "";
 }
-
-
-
-
 
 class layer_class {
     canvas: OffscreenCanvas = new OffscreenCanvas(g.image_width, g.image_height);
-    ctx: OffscreenCanvasRenderingContext2D = this.canvas.getContext('2d') as OffscreenCanvasRenderingContext2D;
+    ctx: OffscreenCanvasRenderingContext2D = this.canvas.getContext(
+        "2d"
+    ) as OffscreenCanvasRenderingContext2D;
 }
 
 let layers: layer_class[] = [];
 layers.push(new layer_class());
 layers.push(new layer_class());
 
-
+/// Function to convert RGB string to integer
+function rgbToInt(rgbString: string) {
+    // Extract numbers using regex
+    const match = rgbString.match(/\d+/g);
+    if (!match || match.length < 3) {
+        throw new Error("Invalid RGB format");
+    }
+    // Convert extracted values to integers
+    const [r, g, b] = match.map(Number);
+    console.log(r, g, b);
+    // Combine into a single integer
+    return (r << 16) | (g << 8) | b;
+}

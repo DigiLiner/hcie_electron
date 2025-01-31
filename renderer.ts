@@ -41,6 +41,7 @@ btnsave.addEventListener('click', async () => {
     console.log(dataURL);
     if (dataURL) {
         await api.saveFile(dataURL, g.filepath, false);
+
     } else {
         console.error('Canvas resmi alınamadı.');
     }
@@ -50,7 +51,7 @@ btnsave.addEventListener('click', async () => {
 //region SAVE AS DIALOG
 const btnsaveas = document.getElementById('btn-save-as');
 //@ts-ignore
-btnsave.addEventListener('click', async () => {
+btnsaveas.addEventListener('click', async () => {
     const dataURL = getCanvasImageDataURL();
     console.log(dataURL);
     if (dataURL) {

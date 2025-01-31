@@ -70,23 +70,31 @@ app.whenReady().then(() => {
     //endregion
     //region save file dialog
     ipcMain.handle('save-file', async (event, dataURL, imagePath, saveas = false) => {
-        if (!imagePath || saveas) {
-            const { canceled, filePath } = await dialog.showSaveDialog({});
-            if (!canceled) { }
-            imagePath = filePath;
+        try {
+            if (!imagePath || saveas) {
+                const { canceled, filePath } = await dialog.showSaveDialog({});
+                if (canceled) {
+                    console.log('Save dialog was canceled.');
+                    return;
+                }
+                imagePath = filePath;
+            }
+            node_path_1.default.join(imagePath);
+            console.log(dataURL);
+            const base64Data = dataURL.replace(/^data:image\/png;base64,/, '');
+            const fullPath = node_path_1.default.join(imagePath);
+            fs_1.default.writeFile(fullPath, base64Data, 'base64', (err) => {
+                if (err) {
+                    console.error('Error saving image:', err);
+                }
+                else {
+                    console.log('Image saved successfully:', fullPath);
+                }
+            });
         }
-        node_path_1.default.join(imagePath);
-        console.log(dataURL);
-        const base64Data = dataURL.replace(/^data:image\/png;base64,/, '');
-        // Dosyayı kaydedin
-        fs_1.default.writeFile(imagePath, base64Data, 'base64', (err) => {
-            if (err) {
-                console.error('Resim kaydedilirken hata oluştu:', err);
-            }
-            else {
-                console.log('Resim başarıyla kaydedildi:', imagePath);
-            }
-        });
+        catch (error) {
+            console.error('An error occurred:', error);
+        }
     });
     //endregion
     app.on('window-all-closed', () => {

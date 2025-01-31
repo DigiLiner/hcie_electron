@@ -1,61 +1,109 @@
-function flood_fill(ctx: CanvasRenderingContext2D, x: number, y: number, fillcolor: string) {
-    // read the pixels in the canvas
-    const imageData = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height);
+const floodFill = (
+    x: number,
+    y: number,
+    ctx: CanvasRenderingContext2D,
+    fillColor: { r: number; g: number; b: number; a: number },
+    tolerance: { r: number; g: number; b: number; a: number } = { r: 32, g: 32, b: 32, a: 32 }
+) => {
+    const canvas = ctx.canvas;
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imageData.data;
+    const visited = new Uint8Array(canvas.width * canvas.height);
 
-    // get the color we're filling
-    const pixel = ctx.getImageData(x, y, 1, 1).data;
-    const targetColor = `rgb(${pixel[0]}, ${pixel[1]}, ${pixel[2]})`;
-   
-    console.log('targetcolor:',targetColor);
-    console.log(ctx.canvas.width, ctx.canvas.height);
-    // check we are actually filling a different color
-    if (!colorsMatch(targetColor, fillcolor)) {
+    const queue = [{ x, y }];
+    const startIndex = (y * canvas.width + x) * 4;
+    const startR = data[startIndex];
+    const startG = data[startIndex + 1];
+    const startB = data[startIndex + 2];
+    const startA = data[startIndex + 3];
 
-        const pixelsToCheck: any[]    = [];
-        while (pixelsToCheck.length > 0) {
-            let y = pixelsToCheck.pop();
-            const x = pixelsToCheck.pop();
-    
-            const currentColor = getPixel(imageData, x, y);
-            if (colorsMatch(currentColor, targetColor)) {
-                setPixel(imageData, x, y, fillcolor);
-                pixelsToCheck.push(x + 1);
-                pixelsToCheck.push(x - 1);
-                pixelsToCheck.push( y + 1);
-                pixelsToCheck.push( y - 1);
-            }
-        }
+    // Avoid filling if the start color is already the fill color
+    if (
+        isColorSimilar(
+            startR, startG, startB, startA,
+            fillColor.r, fillColor.g, fillColor.b, fillColor.a,
+            { r: 0, g: 0, b: 0, a: 0 } // Exact match check
+        )
+    ) return;
 
-    // put the data back
-    ctx.putImageData(imageData, 0, 0);
+    while (queue.length > 0) {
+        const { x: cx, y: cy } = queue.shift()!;
+
+        if (cx < 0 || cx >= canvas.width || cy < 0 || cy >= canvas.height) continue;
+
+        const pixelIndex = (cy * canvas.width + cx) * 4;
+        const r = data[pixelIndex];
+        const g = data[pixelIndex + 1];
+        const b = data[pixelIndex + 2];
+        const a = data[pixelIndex + 3];
+
+        if (
+            visited[cy * canvas.width + cx] === 1 ||
+            !isColorSimilar(r, g, b, a, startR, startG, startB, startA, tolerance)
+        ) continue;
+
+        visited[cy * canvas.width + cx] = 1;
+
+        // Blend the fill color with the original alpha
+        const blended = blendColor(a, fillColor);
+        data[pixelIndex] = blended.r;
+        data[pixelIndex + 1] = blended.g;
+        data[pixelIndex + 2] = blended.b;
+        data[pixelIndex + 3] = blended.a;
+
+        // Include diagonal neighbors (8-direction fill)
+        queue.push({ x: cx - 1, y: cy });
+        queue.push({ x: cx + 1, y: cy });
+        queue.push({ x: cx, y: cy - 1 });
+        queue.push({ x: cx, y: cy + 1 });
+        queue.push({ x: cx - 1, y: cy - 1 });
+        queue.push({ x: cx + 1, y: cy - 1 });
+        queue.push({ x: cx - 1, y: cy + 1 });
+        queue.push({ x: cx + 1, y: cy + 1 });
     }
-}
-function colorsMatch(a:any, b:any) {
-return a[0] === b[0] && a[1] === b[1] && a[2] === b[2] && a[3] === b[3];
-}
+    const optional_step=false //extra blur - problem
+    if (optional_step) {
+        const tempCanvas = document.createElement("canvas");
+        const tempCtx = tempCanvas.getContext("2d")!;
+        tempCanvas.width = canvas.width;
+        tempCanvas.height = canvas.height;
+        tempCtx.putImageData(imageData, 0, 0);
 
-function fillPixel(imageData: ImageData, x: number, y:number, targetColor: string, fillColor: string) {
-const currentColor = getPixel(imageData, x, y);
-if (colorsMatch(currentColor, targetColor)) {
-    setPixel(imageData, x, y, g.pen_color);
-    fillPixel(imageData, x + 1, y, targetColor, fillColor);
-    fillPixel(imageData, x - 1, y, targetColor, fillColor);
-    fillPixel(imageData, x, y + 1, targetColor, fillColor);
-    fillPixel(imageData, x, y - 1, targetColor, fillColor);
-}
-}
-function   setPixel(imageData: ImageData, x: number, y:number , color:any) {
-    const offset: number = (y * imageData.width + x) * 4;
-    imageData.data[offset + 0] = color[0];
-    imageData.data[offset + 1] = color[1];
-    imageData.data[offset + 2] = color[2];
-    imageData.data[offset + 3] = color[0];
-}
-function  getPixel(imageData: ImageData, x: number, y:   number) {
-    if (x < 0 || y < 0 || x >= imageData.width || y >= imageData.height) {
-        return [-1, -1, -1, -1];  // impossible color
-    } else {
-        const offset = (y * imageData.width + x) * 4;
-        return imageData.data.slice(offset, offset + 4);
+// Apply a slight blur to anti-aliased edges
+        tempCtx.filter = "blur(1px)";
+        tempCtx.drawImage(tempCanvas, 0, 0);
+        ctx.drawImage(tempCanvas, 0, 0);
     }
-}
+    else {
+        ctx.putImageData(imageData, 0, 0);
+    }
+};
+
+// Helper function to check if two colors are "similar" within a tolerance
+
+const isColorSimilar = (
+    r1: number, g1: number, b1: number, a1: number,
+    r2: number, g2: number, b2: number, a2: number,
+    tolerance: { r: number; g: number; b: number; a: number }
+) => {
+    return (
+        Math.abs(r1 - r2) <= tolerance.r &&
+        Math.abs(g1 - g2) <= tolerance.g &&
+        Math.abs(b1 - b2) <= tolerance.b &&
+        Math.abs(a1 - a2) <= tolerance.a
+    );
+};
+
+// Blend fill color with the original pixel's alpha
+const blendColor = (
+    originalAlpha: number,
+    fillColor: { r: number; g: number; b: number; a: number }
+) => {
+    const alphaRatio = originalAlpha / 255;
+    return {
+        r: fillColor.r * alphaRatio + (fillColor.r * (1 - alphaRatio)), // Adjust as needed
+        g: fillColor.g * alphaRatio + (fillColor.g * (1 - alphaRatio)),
+        b: fillColor.b * alphaRatio + (fillColor.b * (1 - alphaRatio)),
+        a: fillColor.a * alphaRatio + (fillColor.a * (1 - alphaRatio)),
+    };
+};

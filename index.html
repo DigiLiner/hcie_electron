@@ -1,239 +1,239 @@
 <!DOCTYPE html>
 <html lang="en" style="background-color: white">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta
-      http-equiv="Content-Security-Policy"
-      content="script-src 'self' 'unsafe-inline';"
+            http-equiv="Content-Security-Policy"
+            content="script-src 'self' 'unsafe-inline';"
     />
     <title>Document</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css"/>
     <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
-      rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+            rel="stylesheet"
     />
-  </head>
+</head>
 
-  <body>
-    <script src="global.js"></script>
-    <script src="spray.js" defer></script>
-    <script src="flood_fill.js" defer></script>
-    <script src="drawing_canvas.js" defer></script>
-    <script src="colorbox.js" defer></script>
-    <script src="effects.js" defer></script>
-    <script src="tools.js" defer></script>
-    <script src="slider.js" defer></script>
-    <script src="renderer.js" defer></script>
+<body>
+<script src="global.js"></script>
+<script src="spray.js" defer></script>
+<script src="flood_fill.js" defer></script>
+<script src="drawing_canvas.js" defer></script>
+<script src="colorbox.js" defer></script>
+<script src="effects.js" defer></script>
+<script src="tools.js" defer></script>
+<script src="slider.js" defer></script>
+<script src="renderer.js" defer></script>
 
-    <table style="width: 100%; background: white">
-      <tbody>
-        <!-- 1 Toolbar Row-->
-        <tr>
-          <td style="width: 100%; align-items: center">
+<table style="width: 100%; background: white">
+    <tbody>
+    <!-- 1 Toolbar Row-->
+    <tr>
+        <td style="width: 100%; align-items: center">
             <!-- Toolbar buttons -->
 
             <div class="div-toolbar">
-              <button id="btn-new" title="New" class="button">
-                <img src="toolbar_images/New_32x32.png" alt="Pen" />
-              </button>
-              <button id="btn-open" title="Open" class="button">
-                <img src="toolbar_images/open-gray_32x32.png" alt="Pen" />
-              </button>
-              <button id="btn-save" title="Save" class="button">
-                <img src="toolbar_images/save-gray_32x32.png" alt="Save" />
-              </button>
+                <button id="btn-new" title="New" class="button">
+                    <img src="toolbar_images/New_32x32.png" alt="Pen"/>
+                </button>
+                <button id="btn-open" title="Open" class="button">
+                    <img src="toolbar_images/open-gray_32x32.png" alt="Pen"/>
+                </button>
+                <button id="btn-save" title="Save" class="button">
+                    <img src="toolbar_images/save-gray_32x32.png" alt="Save"/>
+                </button>
 
-              <button
-                id="btn-undo"
-                onclick="undoImage()"
-                title="Undo"
-                class="button"
-              >
-                <img src="toolbar_images/undo-gray_32x32.png" alt="Undo" />
-              </button>
-              <button
-                id="btn-redo"
-                onclick="redoImage()"
-                title="Redo"
-                class="button"
-              >
-                <img src="toolbar_images/redo-gray_32x32.png" alt="Redo" />
-              </button>
-              <button
-                id="btn-zoom-in"
-                onclick="selectTool(Tool.Zoom_In)"
-                title="Zoom In"
-                class="button"
-              >
-                <img src="toolbar_images/zoomin_blue_32x32.png" alt="Zoom In" />
-              </button>
-              <button
-                id="btn-zoom-out"
-                onclick="selectTool(Tool.Zoom_Out)"
-                title="Zoom Out"
-                class="button"
-              >
-                <img
-                  src="toolbar_images/zoomout_blue_32x32.png"
-                  alt="Zoom Out"
-                />
-              </button>
+                <button
+                        id="btn-undo"
+                        onclick="undoImage()"
+                        title="Undo"
+                        class="button"
+                >
+                    <img src="toolbar_images/undo-gray_32x32.png" alt="Undo"/>
+                </button>
+                <button
+                        id="btn-redo"
+                        onclick="redoImage()"
+                        title="Redo"
+                        class="button"
+                >
+                    <img src="toolbar_images/redo-gray_32x32.png" alt="Redo"/>
+                </button>
+                <button
+                        id="btn-zoom-in"
+                        onclick="selectTool(Tool.Zoom_In)"
+                        title="Zoom In"
+                        class="button"
+                >
+                    <img src="toolbar_images/zoomin_blue_32x32.png" alt="Zoom In"/>
+                </button>
+                <button
+                        id="btn-zoom-out"
+                        onclick="selectTool(Tool.Zoom_Out)"
+                        title="Zoom Out"
+                        class="button"
+                >
+                    <img
+                            src="toolbar_images/zoomout_blue_32x32.png"
+                            alt="Zoom Out"
+                    />
+                </button>
 
-              <div id="sliderContainerWidth" class="slider-container"></div>
-              <div id="sliderContainerOpacity" class="slider-container"></div>
-              <div id="sliderContainerBlur" class="slider-container"></div>
+                <div id="sliderContainerWidth" class="slider-container"></div>
+                <div id="sliderContainerOpacity" class="slider-container"></div>
+                <div id="sliderContainerBlur" class="slider-container"></div>
             </div>
-          </td>
-        </tr>
-        <!-- End Toolbar Row -->
-        <!-- 2 Middle Row -->
+        </td>
+    </tr>
+    <!-- End Toolbar Row -->
+    <!-- 2 Middle Row -->
 
-        <tr>
-          <td style="width: 100%">
+    <tr>
+        <td style="width: 100%">
             <table style="width: 100%; background: rgba(191, 253, 254, 0)">
-              <tbody>
+                <tbody>
                 <tr>
-                  <td
-                    id="leftToolboxContainer"
-                    draggable="false"
-                    style="justify-content: left"
-                  >
-                    <!-- Left Toolbox -->
-                    <div class="div-toolbox" id="leftToolbox">
-                      <button
-                        id="btn-pen"
-                        onclick="selectTool(Tool.Pen)"
-                        title="Pen"
-                        class="button"
-                      >
-                        <img src="toolbar_images/pen_32x32.png" alt="Pen" />
-                      </button>
-                      <button
-                        id="btn-brush"
-                        onclick="selectTool(Tool.Brush)"
-                        title="Pen"
-                        class="button"
-                      >
-                        <img src="toolbar_images/brush.png" alt="Brush" />
-                      </button>
+                    <td
+                            id="leftToolboxContainer"
+                            draggable="false"
+                            style="justify-content: left"
+                    >
+                        <!-- Left Toolbox -->
+                        <div class="div-toolbox" id="leftToolbox">
+                            <button
+                                    id="btn-pen"
+                                    onclick="selectTool(Tool.Pen)"
+                                    title="Pen"
+                                    class="button"
+                            >
+                                <img src="toolbar_images/pen_32x32.png" alt="Pen"/>
+                            </button>
+                            <button
+                                    id="btn-brush"
+                                    onclick="selectTool(Tool.Brush)"
+                                    title="Pen"
+                                    class="button"
+                            >
+                                <img src="toolbar_images/brush.png" alt="Brush"/>
+                            </button>
 
-                      <button
-                        id="btn-eraser"
-                        onclick="selectTool(Tool.Eraser)"
-                        title="Eraser"
-                        class="button"
-                      >
-                        <img
-                          src="toolbar_images/eraser-gray_32x32.png"
-                          alt="Eraser"
-                        />
-                      </button>
+                            <button
+                                    id="btn-eraser"
+                                    onclick="selectTool(Tool.Eraser)"
+                                    title="Eraser"
+                                    class="button"
+                            >
+                                <img
+                                        src="toolbar_images/eraser-gray_32x32.png"
+                                        alt="Eraser"
+                                />
+                            </button>
 
-                      <button
-                        id="btn-spray"
-                        onclick="selectTool(Tool.Spray)"
-                        title="Spray"
-                        class="button"
-                      >
-                        <img
-                          src="toolbar_images/spray-gray_32x32.png"
-                          alt="Spray"
-                        />
-                      </button>
+                            <button
+                                    id="btn-spray"
+                                    onclick="selectTool(Tool.Spray)"
+                                    title="Spray"
+                                    class="button"
+                            >
+                                <img
+                                        src="toolbar_images/spray-gray_32x32.png"
+                                        alt="Spray"
+                                />
+                            </button>
 
-                      <button
-                        id="btn-flood-fill"
-                        onclick="selectTool(Tool.Flood_Fill)"
-                        title="Flood Fill"
-                        class="button"
-                      >
-                        <img
-                          src="toolbar_images/fill-gray_32x32.png"
-                          alt="Flood Fill"
-                        />
-                      </button>
-                      <button
-                        id="btn-line"
-                        onclick="selectTool(Tool.Line)"
-                        title="Line"
-                        class="button"
-                      >
-                        <img
-                          alt="Line"
-                          src="toolbar_images/line-gray_32x32.png"
-                        />
-                      </button>
-                      <button
-                        id="btn-rect"
-                        onclick="selectTool(Tool.Rectangle)"
-                        title="Rectangle"
-                        class="button"
-                      >
-                        <img
-                          src="toolbar_images/rectangle_32x32.png"
-                          alt="Rectangle"
-                        />
-                      </button>
-                      <button
-                        id="btn-circle"
-                        onclick="selectTool(Tool.Circle)"
-                        title="Circle"
-                        class="button"
-                      >
-                        <img
-                          alt="Circle"
-                          src="toolbar_images/circle-thick-gray_32x32.png"
-                        />
-                      </button>
-                      <button
-                        id="btn-eye-dropper"
-                        onclick="selectTool(Tool.Eye_Dropper)"
-                        title="Eye Dropper"
-                        class="button"
-                      >
-                        <img
-                          src="toolbar_images/dropper_32x32.png"
-                          alt="Triangle                          "
-                        />
-                      </button>
-                      <button
-                        id="btn-text"
-                        onclick="selectTool(Tool.Text)"
-                        title="Text"
-                        class="button"
-                      >
-                        <img src="toolbar_images/text_32x32.png" alt="Text" />
-                      </button>
+                            <button
+                                    id="btn-flood-fill"
+                                    onclick="selectTool(Tool.Flood_Fill)"
+                                    title="Flood Fill"
+                                    class="button"
+                            >
+                                <img
+                                        src="toolbar_images/fill-gray_32x32.png"
+                                        alt="Flood Fill"
+                                />
+                            </button>
+                            <button
+                                    id="btn-line"
+                                    onclick="selectTool(Tool.Line)"
+                                    title="Line"
+                                    class="button"
+                            >
+                                <img
+                                        alt="Line"
+                                        src="toolbar_images/line-gray_32x32.png"
+                                />
+                            </button>
+                            <button
+                                    id="btn-rect"
+                                    onclick="selectTool(Tool.Rectangle)"
+                                    title="Rectangle"
+                                    class="button"
+                            >
+                                <img
+                                        src="toolbar_images/rectangle_32x32.png"
+                                        alt="Rectangle"
+                                />
+                            </button>
+                            <button
+                                    id="btn-circle"
+                                    onclick="selectTool(Tool.Circle)"
+                                    title="Circle"
+                                    class="button"
+                            >
+                                <img
+                                        alt="Circle"
+                                        src="toolbar_images/circle-thick-gray_32x32.png"
+                                />
+                            </button>
+                            <button
+                                    id="btn-eye-dropper"
+                                    onclick="selectTool(Tool.Eye_Dropper)"
+                                    title="Eye Dropper"
+                                    class="button"
+                            >
+                                <img
+                                        src="toolbar_images/dropper_32x32.png"
+                                        alt="Triangle                          "
+                                />
+                            </button>
+                            <button
+                                    id="btn-text"
+                                    onclick="selectTool(Tool.Text)"
+                                    title="Text"
+                                    class="button"
+                            >
+                                <img src="toolbar_images/text_32x32.png" alt="Text"/>
+                            </button>
 
-                      <button onclick="clearCanvas()" class="button">
-                        <img
-                          src="toolbar_images/delete-gray_32x32.png"
-                          alt="Clear"
-                        />
-                      </button>
-                    </div>
-                    <!-- End Left Toolbox -->
-                  </td>
-                  <td
-                    id="drawingCanvasContainer"
-                    class="drawing-canvas-container"
-                    )
-                  >
-                    <!-- Drawing canvas -->
-                    <div class="drawing-canvas-wrapper">
-                      <canvas
-                        draggable="false"
-                        id="drawingCanvas"
-                        class="drawing-canvas"
-                      ></canvas>
-                    </div>
-                    <!-- End Drawing canvas -->
-                  </td>
-                  <!-- Div Color box -->
-                  <td id="colorBoxContainer">
-                    <div
-                      style="
+                            <button onclick="clearCanvas()" class="button">
+                                <img
+                                        src="toolbar_images/delete-gray_32x32.png"
+                                        alt="Clear"
+                                />
+                            </button>
+                        </div>
+                        <!-- End Left Toolbox -->
+                    </td>
+                    <td
+                            id="drawingCanvasContainer"
+                            class="drawing-canvas-container"
+                            )
+                    >
+                        <!-- Drawing canvas -->
+                        <div class="drawing-canvas-wrapper">
+                            <canvas
+                                    draggable="false"
+                                    id="drawingCanvas"
+                                    class="drawing-canvas"
+                            ></canvas>
+                        </div>
+                        <!-- End Drawing canvas -->
+                    </td>
+                    <!-- Div Color box -->
+                    <td id="colorBoxContainer">
+                        <div
+                                style="
                         width: 84px;
                         height: 300px;
                         padding: 1px;
@@ -245,44 +245,44 @@
                         justify-self: right;
                         justify-content: right;
                       "
-                    >
-                      <!-- Color box canvas -->
-                      <canvas id="colorBoxCanvas" width="86" height="300">
-                      </canvas>
-                    </div>
-                  </td>
+                        >
+                            <!-- Color box canvas -->
+                            <canvas id="colorBoxCanvas" width="86" height="300">
+                            </canvas>
+                        </div>
+                    </td>
                 </tr>
-              </tbody>
+                </tbody>
             </table>
             <!-- End Middle Row -->
             <!-- Zoom and original canvases hidden -->
             <table style="width: 100%; display: none">
-              <tbody>
+                <tbody>
                 <tr>
-                  <td style="width: 50%">
-                    <!-- Original and zoom canvases -->
-                    <canvas
-                      id="originalCanvas"
-                      width="1000"
-                      height="600"
-                      style="border: 1px solid #4baabb; display: inline"
-                    ></canvas>
-                  </td>
-                  <td style="width: 50%">
-                    <canvas
-                      id="zoomCanvas"
-                      style="border: 2px solid #a2e91d; display: none"
-                    ></canvas>
-                  </td>
+                    <td style="width: 50%">
+                        <!-- Original and zoom canvases -->
+                        <canvas
+                                id="originalCanvas"
+                                width="1000"
+                                height="600"
+                                style="border: 1px solid #4baabb; display: inline"
+                        ></canvas>
+                    </td>
+                    <td style="width: 50%">
+                        <canvas
+                                id="zoomCanvas"
+                                style="border: 2px solid #a2e91d; display: none"
+                        ></canvas>
+                    </td>
                 </tr>
-              </tbody>
+                </tbody>
             </table>
-          </td>
-        </tr>
-        <!-- End Middle Row -->
+        </td>
+    </tr>
+    <!-- End Middle Row -->
 
-        <tr
-          style="
+    <tr
+            style="
             display: flex;
             position: absolute;
             bottom: 5px;
@@ -291,11 +291,11 @@
             justify-content: center;
             border: 1px solid #ccc;
           "
-        >
-          <!-- Status bar row -->
-          <td style="display: flex">
+    >
+        <!-- Status bar row -->
+        <td style="display: flex">
             <div
-              style="
+                    style="
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
@@ -309,45 +309,45 @@
                 -ms-user-select: none; /* IE 10+ */
               "
             >
-              <span class="unselectable" id="toolName">Pen</span>
-              <span id="statusMessage">Ready</span>
-              <span id="mousePosition">X: 0, Y: 0</span>
-              <span id="filePath">Image 1</span>
-              <button id="toggle-dark-mode">Toggle Dark Mode</button>
-              <button id="reset-to-system">Reset to System Theme</button>
+                <span class="unselectable" id="toolName">Pen</span>
+                <span id="statusMessage">Ready</span>
+                <span id="mousePosition">X: 0, Y: 0</span>
+                <span id="filePath">Image 1</span>
+                <button id="toggle-dark-mode">Toggle Dark Mode</button>
+                <button id="reset-to-system">Reset to System Theme</button>
             </div>
-          </td>
-          <td style="display: flex; align-items: center">
+        </td>
+        <td style="display: flex; align-items: center">
             <div id="sliderContainerRadius"></div>
             <div id="sliderContainerDensity"></div>
-          </td>
+        </td>
 
-          <script>
+        <script>
             const statusMessage = document.getElementById("statusMessage");
             const mousePosition = document.getElementById("mousePosition");
             const drawingCanvas = document.getElementById("drawingCanvas");
             const toolName = document.getElementById("toolName");
             drawingCanvas.addEventListener("mousemove", (event) => {
-              const rect = drawingCanvas.getBoundingClientRect();
-              const x = event.clientX - rect.left;
-              const y = event.clientY - rect.top;
-              if (g.drawing) {
-                statusMessage.innerHTML = "Drawing  ";
-              } else {
-                statusMessage.innerHTML = "Ready  ";
-              }
-              mousePosition.textContent = `X: ${Math.round(x)}, Y: ${Math.round(
-                y
-              )}`;
-              toolName.textContent = `Tool: ${g.current_tool}`;
+                const rect = drawingCanvas.getBoundingClientRect();
+                const x = event.clientX - rect.left;
+                const y = event.clientY - rect.top;
+                if (g.drawing) {
+                    statusMessage.innerHTML = "Drawing  ";
+                } else {
+                    statusMessage.innerHTML = "Ready  ";
+                }
+                mousePosition.textContent = `X: ${Math.round(x)}, Y: ${Math.round(
+                    y
+                )}`;
+                toolName.textContent = `Tool: ${g.current_tool}`;
             });
 
             function updateStatus(message) {
-              statusMessage.textContent = message;
+                statusMessage.textContent = message;
             }
-          </script>
-        </tr>
-      </tbody>
-    </table>
-  </body>
+        </script>
+    </tr>
+    </tbody>
+</table>
+</body>
 </html>

@@ -20,7 +20,7 @@ class Tool {
             Tool.Flood_Fill,
             Tool.Eraser,
             Tool.Eye_Dropper,
-            Tool.Text
+            Tool.Text,
         ];
     }
 }
@@ -38,7 +38,7 @@ Tool.Zoom_In = new Tool("Zoom In", "btn-zoom-in", false);
 Tool.Zoom_Out = new Tool("Zoom Out", "btn-zoom-out", false);
 Tool.Undo = new Tool("Undo", "btn-undo", false);
 Tool.Redo = new Tool("Redo", "btn-redo", false);
-// Class for global variables
+/// Class for global variables
 class g {
 }
 //flag for drawing on canvas true/false
@@ -46,7 +46,7 @@ g.drawing = false;
 //current tool for drawing string= line, circle, rect, pen, brush, spray, fill
 g.current_tool = Tool.Pen;
 //color of pencil
-g.pen_color = "black";
+g.pen_color = '#000000';
 //width of pencil
 g.pen_width = 10;
 //Opacity of pencil 0-Transparent to 1-Opaque
@@ -82,7 +82,7 @@ g.image_bg_color = "white";
 //flag for zooming true/false
 g.zooming = false;
 //tool icon size
-g.tool_icon_size = '24px';
+g.tool_icon_size = "24px";
 //flag for erasing true/false
 g.erasing = false;
 g.counter = 0;
@@ -92,9 +92,22 @@ g.filepath = "";
 class layer_class {
     constructor() {
         this.canvas = new OffscreenCanvas(g.image_width, g.image_height);
-        this.ctx = this.canvas.getContext('2d');
+        this.ctx = this.canvas.getContext("2d");
     }
 }
 let layers = [];
 layers.push(new layer_class());
 layers.push(new layer_class());
+/// Function to convert RGB string to integer
+function rgbToInt(rgbString) {
+    // Extract numbers using regex
+    const match = rgbString.match(/\d+/g);
+    if (!match || match.length < 3) {
+        throw new Error("Invalid RGB format");
+    }
+    // Convert extracted values to integers
+    const [r, g, b] = match.map(Number);
+    console.log(r, g, b);
+    // Combine into a single integer
+    return (r << 16) | (g << 8) | b;
+}

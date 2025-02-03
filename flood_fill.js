@@ -1,5 +1,10 @@
 "use strict";
-const floodFill = (x, y, ctx, fillColor, tolerance = { r: 32, g: 32, b: 32, a: 32 }) => {
+const floodFill = (x, y, ctx, fillColor, tolerance = {
+    r: 32,
+    g: 32,
+    b: 32,
+    a: 32,
+}) => {
     const canvas = ctx.canvas;
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     const data = imageData.data;
@@ -70,9 +75,9 @@ const isColorSimilar = (r1, g1, b1, a1, r2, g2, b2, a2, tolerance) => {
 const blendColor = (originalAlpha, fillColor) => {
     const alphaRatio = originalAlpha / 255;
     return {
-        r: fillColor.r * alphaRatio + (fillColor.r * (1 - alphaRatio)), // Adjust as needed
-        g: fillColor.g * alphaRatio + (fillColor.g * (1 - alphaRatio)),
-        b: fillColor.b * alphaRatio + (fillColor.b * (1 - alphaRatio)),
-        a: fillColor.a * alphaRatio + (fillColor.a * (1 - alphaRatio)),
+        r: fillColor.r * alphaRatio + fillColor.r * (1 - alphaRatio), // Adjust as needed
+        g: fillColor.g * alphaRatio + fillColor.g * (1 - alphaRatio),
+        b: fillColor.b * alphaRatio + fillColor.b * (1 - alphaRatio),
+        a: fillColor.a * alphaRatio + fillColor.a * (1 - alphaRatio),
     };
 };

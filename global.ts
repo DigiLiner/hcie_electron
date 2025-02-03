@@ -79,7 +79,7 @@ class g {
     //Start position Y of mouse
     static startY = 0;
     //Zoom factor of canvas
-    static zoom_factor = 1;
+    static zoom_factor = 2;
     //Image width of original canvas
     static image_width = 500;
     //Image height of original canvas

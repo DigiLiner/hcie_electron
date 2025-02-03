@@ -5,7 +5,7 @@
 ZOOM IN/OUT functionality
 ~~OPEN/SAVE functionality~~
 basic drawing functionality -ok
-- [ ] FLOOD FILL
+- [x] FLOOD FILL (HALF)
 - [ ] ERASER
 SPRAY
 - [x] CIRCLE

@@ -72,7 +72,7 @@ g.startX = 0;
 //Start position Y of mouse
 g.startY = 0;
 //Zoom factor of canvas
-g.zoom_factor = 1;
+g.zoom_factor = 2;
 //Image width of original canvas
 g.image_width = 500;
 //Image height of original canvas

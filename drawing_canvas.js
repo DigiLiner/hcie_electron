@@ -29,6 +29,7 @@ window.addEventListener("resize", calculateScreenSize);
 calculateScreenSize();
 let originalCanvas;
 originalCanvas = document.getElementById('originalCanvas');
+const originalCtx = originalCanvas.getContext("2d");
 if (originalCanvas !== null) {
     originalCanvas.width = g.image_width;
     originalCanvas.height = g.image_height;
@@ -75,7 +76,12 @@ can.addEventListener('mousedown', (e) => {
         console.error("ctx not found");
         return;
     }
+    // @ts-ignore
+    //can.width = g.image_width * g.zoom_factor;
+    // @ts-ignore
+    //can.height = g.image_height * g.zoom_factor;
     ctx.globalAlpha = 1;
+    // ctx.scale(g.zoom_factor, g.zoom_factor);
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     if (originalCanvas) {
         ctx.drawImage(originalCanvas, 0, 0);
@@ -85,6 +91,7 @@ can.addEventListener('mousedown', (e) => {
     }
     // Pen Line Settings All tools
     ctx.globalAlpha = g.pen_opacity;
+    ctx.filter = "blur(" + g.pen_blur + "px)";
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
     ctx.setLineDash([]);
@@ -93,7 +100,6 @@ can.addEventListener('mousedown', (e) => {
     g.counter++;
     console.log(g.counter.toString());
     //ctx.filter= "blur(5px)"
-    ctx.filter = "blur(" + g.pen_blur + "px)";
     console.log(ctx.filter);
     //Start Position of mouse
     g.startX = e.offsetX;
@@ -115,7 +121,8 @@ can.addEventListener('mousedown', (e) => {
             }
             // Convert extracted values to integers
             const [r, gr, b] = match.map(Number);
-            floodFill(e.offsetX, e.offsetY, ctx, { r: r, g: gr, b: b, a: 255 }, { r: 48, g: 48, b: 48, a: 64 }); //todo: siyah (0) ise çalışıyor
+            const tolerance = 100;
+            floodFill(e.offsetX, e.offsetY, ctx, { r: r, g: gr, b: b, a: Math.floor(g.pen_opacity * 255) }, { r: tolerance, g: tolerance, b: tolerance, a: 128 });
             break;
         default:
             break;
@@ -296,5 +303,13 @@ async function loadImage(url) {
 function getCanvasImageDataURL() {
     const canvas = document.getElementById("originalCanvas");
     return canvas.toDataURL("image/png");
+}
+
+//todo: zoom buttons change zoom factor
+function zoomIn(){
+
+}
+function zoomOut(){
+
 }
 console.log("Started...");

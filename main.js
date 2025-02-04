@@ -7,8 +7,8 @@ const main_menu_1 = __importDefault(require("./main_menu"));
 const electron_1 = __importDefault(require("electron"));
 const url_1 = __importDefault(require("url"));
 const node_path_1 = __importDefault(require("node:path"));
-const { app, BrowserWindow, Menu, ipcMain, nativeTheme, dialog } = electron_1.default;
 const fs_1 = __importDefault(require("fs"));
+const { app, BrowserWindow, Menu, ipcMain, nativeTheme, dialog } = electron_1.default;
 // @ts-ignore
 let mainWindow;
 app.commandLine.appendSwitch('high-dpi-support', '1');
@@ -39,19 +39,18 @@ app.on('ready', function () {
 const mainMenu = Menu.buildFromTemplate(main_menu_1.default);
 Menu.setApplicationMenu(mainMenu);
 //region theme
-/*
 ipcMain.handle('dark-mode:toggle', () => {
     if (nativeTheme.shouldUseDarkColors) {
-        nativeTheme.themeSource = 'light'
-    } else {
-        nativeTheme.themeSource = 'dark'
+        nativeTheme.themeSource = 'light';
     }
-    return nativeTheme.shouldUseDarkColors
-})
-
+    else {
+        nativeTheme.themeSource = 'dark';
+    }
+    return nativeTheme.shouldUseDarkColors;
+});
 ipcMain.handle('dark-mode:system', () => {
-    nativeTheme.themeSource = 'system'
-})*/
+    nativeTheme.themeSource = 'system';
+});
 //endregion
 app.whenReady().then(() => {
     //region open file dialog

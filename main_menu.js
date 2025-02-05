@@ -1,4 +1,5 @@
 "use strict";
+// @ts-ignore
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -36,7 +37,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// @ts-ignore
 const electron_1 = __importStar(require("electron"));
 const path_1 = __importDefault(require("path"));
 const isMac = process.platform === 'darwin';

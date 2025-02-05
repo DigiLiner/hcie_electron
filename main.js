@@ -39,19 +39,18 @@ app.on('ready', function () {
 const mainMenu = Menu.buildFromTemplate(main_menu_1.default);
 Menu.setApplicationMenu(mainMenu);
 //region theme
-/*
 ipcMain.handle('dark-mode:toggle', () => {
     if (nativeTheme.shouldUseDarkColors) {
-        nativeTheme.themeSource = 'light'
-    } else {
-        nativeTheme.themeSource = 'dark'
+        nativeTheme.themeSource = 'light';
     }
-    return nativeTheme.shouldUseDarkColors
-})
-
+    else {
+        nativeTheme.themeSource = 'dark';
+    }
+    return nativeTheme.shouldUseDarkColors;
+});
 ipcMain.handle('dark-mode:system', () => {
-    nativeTheme.themeSource = 'system'
-})*/
+    nativeTheme.themeSource = 'system';
+});
 //endregion
 app.whenReady().then(() => {
     //region open file dialog

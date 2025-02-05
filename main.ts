@@ -40,7 +40,7 @@ app.on('ready', function () {
 const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
 Menu.setApplicationMenu(mainMenu);
 //region theme
-/*
+
 ipcMain.handle('dark-mode:toggle', () => {
     if (nativeTheme.shouldUseDarkColors) {
         nativeTheme.themeSource = 'light'
@@ -52,7 +52,7 @@ ipcMain.handle('dark-mode:toggle', () => {
 
 ipcMain.handle('dark-mode:system', () => {
     nativeTheme.themeSource = 'system'
-})*/
+})
 //endregion
 app.whenReady().then(() => {
 //region open file dialog

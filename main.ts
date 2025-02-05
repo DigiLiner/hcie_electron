@@ -2,9 +2,9 @@ import mainMenuTemplate from "./main_menu";
 import electron from 'electron';
 import url from 'url';
 import path from 'node:path';
+import fs from 'fs';
 
 const {app, BrowserWindow, Menu, ipcMain, nativeTheme, dialog} = electron;
-import fs from 'fs';
 // @ts-ignore
 let mainWindow: BrowserWindow;
 app.commandLine.appendSwitch('high-dpi-support', '1');

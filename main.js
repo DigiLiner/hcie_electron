@@ -7,8 +7,8 @@ const main_menu_1 = __importDefault(require("./main_menu"));
 const electron_1 = __importDefault(require("electron"));
 const url_1 = __importDefault(require("url"));
 const node_path_1 = __importDefault(require("node:path"));
-const { app, BrowserWindow, Menu, ipcMain, nativeTheme, dialog } = electron_1.default;
 const fs_1 = __importDefault(require("fs"));
+const { app, BrowserWindow, Menu, ipcMain, nativeTheme, dialog } = electron_1.default;
 // @ts-ignore
 let mainWindow;
 app.commandLine.appendSwitch('high-dpi-support', '1');

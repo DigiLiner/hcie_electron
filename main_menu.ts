@@ -1,6 +1,4 @@
-import url from "url";
 // @ts-ignore
-
 import electron, {app, Menu} from "electron";
 
 import path from "path";

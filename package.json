@@ -10,7 +10,7 @@
   "description": "",
   "dependencies": {
     "canvas": "^3.1.0",
-    "electron": "^34.0.0",
+    "electron": "^34.0.2",
     "new": "file:"
   },
   "devDependencies": {

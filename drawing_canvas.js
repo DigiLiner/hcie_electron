@@ -304,12 +304,4 @@ function getCanvasImageDataURL() {
     const canvas = document.getElementById("originalCanvas");
     return canvas.toDataURL("image/png");
 }
-
-//todo: zoom buttons change zoom factor
-function zoomIn(){
-
-}
-function zoomOut(){
-
-}
 console.log("Started...");

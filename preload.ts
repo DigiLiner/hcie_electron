@@ -1,5 +1,3 @@
-import {Canvas} from "canvas";
-
 const { contextBridge, ipcRenderer } = require('electron')
 
 contextBridge.exposeInMainWorld('darkMode', {

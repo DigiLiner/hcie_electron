@@ -39,6 +39,8 @@ else {
 }
 //Viewer/Drawing Canvas (Picture1)
 let can;
+let tempCanvas = new OffscreenCanvas(g.image_width, g.image_height);
+const tempCtx = tempCanvas.getContext("2d");
 can = document.getElementById("drawingCanvas");
 if (can !== null) {
     can.width = g.image_width;
@@ -50,8 +52,8 @@ else {
 //Zoom canvas (Test)
 const zoomCanvas = document.getElementById("zoomCanvas");
 if (zoomCanvas !== null) {
-    zoomCanvas.width = can.width * g.zoom_factor;
-    zoomCanvas.height = can.height * g.zoom_factor;
+    zoomCanvas.width = can.width * g.zoom;
+    zoomCanvas.height = can.height * g.zoom;
 }
 else {
     console.error("zoomCanvas not found");
@@ -70,48 +72,57 @@ layers[1].ctx.fillText("counter: " + g.counter.toString(), 120, 150);
 layers[1].ctx.fillStyle = "#0f0f";
 layers[1].ctx.fillRect(200, 200, 150, 150);
 const ctx = can.getContext("2d");
+////////////////////////////////////////////////////
+/////////////////   D  O  W  N /////////////////////
+////////////////////////////////////////////////////
+////////////////////////////////////////////////////
 can.addEventListener('mousedown', (e) => {
     console.log('mousedown buttons:' + e.buttons.toString());
     if (!ctx) {
         console.error("ctx not found");
         return;
     }
-    // @ts-ignore
-    //can.width = g.image_width * g.zoom_factor;
-    // @ts-ignore
-    //can.height = g.image_height * g.zoom_factor;
-    ctx.globalAlpha = 1;
-    // ctx.scale(g.zoom_factor, g.zoom_factor);
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    tempCtx.globalAlpha = 1;
+    tempCtx.filter = "none";
+    tempCtx.clearRect(0, 0, tempCtx.canvas.width, tempCtx.canvas.height);
     if (originalCanvas) {
-        ctx.drawImage(originalCanvas, 0, 0);
+        tempCtx.drawImage(originalCanvas, 0, 0); //Backup original
+        ctx.clearRect(0, 0, g.image_width, g.image_height);
+        ctx.drawImage(tempCanvas, 0, 0);
     }
     else {
         console.error("originalCanvas is null");
     }
+    ctx.filter = 'none';
+    ctx.globalAlpha = 1;
     // Pen Line Settings All tools
-    ctx.globalAlpha = g.pen_opacity;
-    ctx.filter = "blur(" + g.pen_blur + "px)";
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
-    ctx.setLineDash([]);
-    ctx.lineWidth = g.pen_width;
-    ctx.strokeStyle = g.pen_color;
+    tempCtx.globalAlpha = g.pen_opacity;
+    if (g.pen_blur > 0) {
+        tempCtx.filter = "blur(" + g.pen_blur + "px)";
+    }
+    else {
+        tempCtx.filter = "none";
+    }
+    tempCtx.lineCap = "round";
+    tempCtx.lineJoin = "round";
+    tempCtx.setLineDash([]);
+    tempCtx.lineWidth = g.pen_width;
+    tempCtx.strokeStyle = g.pen_color;
     g.counter++;
     console.log(g.counter.toString());
-    //ctx.filter= "blur(5px)"
-    console.log(ctx.filter);
+    g.pX = Math.round(e.offsetX / g.zoom);
+    g.pY = Math.round(e.offsetY / g.zoom);
     //Start Position of mouse
-    g.startX = e.offsetX;
-    g.startY = e.offsetY;
+    g.startX = g.pX;
+    g.startY = g.pY;
     //Set Drawing Flag
     g.drawing = true;
     switch (g.current_tool) {
         case Tool.Spray:
-            drawSpray(ctx, e);
+            drawSpray(tempCtx, e);
             break; //todo:
         case Tool.Pen:
-            drawPen(e, ctx);
+            drawPen(e, tempCtx);
             break;
         case Tool.Flood_Fill:
             //convert hex string to int as color
@@ -122,64 +133,95 @@ can.addEventListener('mousedown', (e) => {
             // Convert extracted values to integers
             const [r, gr, b] = match.map(Number);
             const tolerance = 100;
-            floodFill(e.offsetX, e.offsetY, ctx, { r: r, g: gr, b: b, a: Math.floor(g.pen_opacity * 255) }, { r: tolerance, g: tolerance, b: tolerance, a: 128 });
+            floodFill(g.pX, g.pY, tempCtx, {
+                r: r,
+                g: gr,
+                b: b,
+                a: Math.floor(g.pen_opacity * 255)
+            }, {
+                r: tolerance,
+                g: tolerance,
+                b: tolerance,
+                a: 128
+            });
             break;
         default:
             break;
     }
-    console.log(`Mouse down at (${e.offsetX}, ${e.offsetY}) with tool ${g.current_tool} and color ${g.pen_color}`);
+    console.log(`Mouse down at (${g.pX}, ${g.pY}) with tool ${g.current_tool} and color ${g.pen_color}`);
 });
+////////////////////////////////////////////////////
+/////////////////   M  O  V  E /////////////////////
+////////////////////////////////////////////////////
+////////////////////////////////////////////////////
 can.addEventListener("mousemove", (e) => {
     if (!ctx) {
         console.error("ctx not found");
         return;
     }
-    ctx.globalAlpha = 1;
-    ctx.filter = "none";
+    tempCtx.globalAlpha = 1;
+    tempCtx.filter = "none";
     // console.log('mousemove ' + g.drawing + ' ' + e.buttons.toString());
-    // console.log(`Mouse move at (${e.offsetX}, ${e.offsetY}) with tool ${g.current_tool} and color ${g.pencil_color}`);
+    console.log(`Mouse move at (${e.offsetX}, ${e.offsetY}) with tool ${g.current_tool} and color ${g.pen_color}`);
+    g.pX = Math.round(e.offsetX / g.zoom);
+    g.pY = Math.round(e.offsetY / g.zoom);
     if (e.buttons === 1) {
         if (!g.drawing) {
             finishDrawing();
-            g.startX = e.offsetX;
-            g.startY = e.offsetY;
+            g.startX = g.pX;
+            g.startY = g.pY;
             g.drawing = true;
         }
         if (!(g.current_tool === Tool.Spray || //Type 1 tools excluded
             g.current_tool === Tool.Pen)) {
             console.log("layers.length:", layers.length);
-            ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-            ctx.drawImage(originalCanvas, 0, 0);
+            tempCtx.clearRect(0, 0, tempCtx.canvas.width, tempCtx.canvas.height);
+            tempCtx.drawImage(originalCanvas, 0, 0);
         }
         console.log(g.current_tool, g.drawing);
         //Pen Line Settings All tools
-        ctx.filter = "blur(" + g.pen_blur + "px)";
-        ctx.globalAlpha = g.pen_opacity;
+        if (g.pen_blur > 0) {
+            tempCtx.filter = "blur(" + g.pen_blur + "px)";
+        }
+        else {
+            tempCtx.filter = "none";
+        }
+        tempCtx.globalAlpha = g.pen_opacity;
         if (g.current_tool === Tool.Circle) {
-            drawCircle(e, ctx);
+            drawCircle(e, tempCtx);
         }
         else if (g.current_tool === Tool.Line) {
-            drawLine(e, ctx);
+            drawLine(e, tempCtx);
         }
         else if (g.current_tool === Tool.Rectangle) {
-            drawRect(ctx, g.startX, g.startY, e.offsetX, e.offsetY);
+            drawRect(tempCtx, g.startX, g.startY, g.pX, g.pY);
         }
         else if (g.current_tool === Tool.Pen) {
-            drawPen(e, ctx);
+            drawPen(e, tempCtx);
+            //ctx.drawImage(tempCanvas, 0, 0);
         }
         else if (g.current_tool === Tool.Brush) {
-            drawCircle(e, ctx);
+            drawCircle(e, tempCtx);
         }
         else if (g.current_tool === Tool.Spray) {
             //todo:
-            drawSpray(ctx, e);
+            drawSpray(tempCtx, e);
         }
+        console.log("canvas width:", ctx.canvas.width);
+        // @ts-ignore
+        ctx.clearRect(0, 0, g.image_width, g.image_height); //todo : Strange
+        // @ts-ignore
+        ctx.drawImage(tempCanvas, 0, 0);
     }
 });
 can.addEventListener("mouseup", () => {
     //if (e.buttons === 0) {return}
     finishDrawing();
 });
+////////////////////////////////////////////////////
+/////////////////  F I N I S H /////////////////////
+////////////////////////////////////////////////////
+////////////////////////////////////////////////////
 function finishDrawing() {
     if (ctx === null) {
         console.error("ctx not found");
@@ -198,10 +240,14 @@ function finishDrawing() {
         console.error("originalCtx not found");
         return;
     }
-    ctx.filter = "none";
-    ctx.globalAlpha = 1;
-    originalCtx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    originalCtx.drawImage(ctx.canvas, 0, 0);
+    tempCtx.filter = "none";
+    tempCtx.globalAlpha = 1;
+    originalCtx.filter = "none";
+    originalCtx.clearRect(0, 0, tempCtx.canvas.width, tempCtx.canvas.height);
+    originalCtx.drawImage(tempCtx.canvas, 0, 0);
+    ctx.clearRect(0, 0, g.image_width, g.image_height);
+    ctx.drawImage(originalCtx.canvas, 0, 0);
+    //originalCtx.drawImage(tempCanvas, 0, 0, tempCanvas.width, tempCanvas.height, 0, 0, originalCanvas.width, originalCanvas.height);
     if (g.undo_index < undo.length - 1) {
         undo.splice(g.undo_index + 1, undo.length - g.undo_index - 1);
     }
@@ -304,4 +350,38 @@ function getCanvasImageDataURL() {
     const canvas = document.getElementById("originalCanvas");
     return canvas.toDataURL("image/png");
 }
+// Function to handle zoom in
+function zoomIn() {
+    g.zoom = g.zoom * g.zoomFactor;
+    console.error("zoom in", g.zoom);
+    setZoom();
+}
+// Function to handle zoom out
+function zoomOut() {
+    g.zoom = g.zoom / g.zoomFactor;
+    setZoom();
+}
+function setZoom() {
+    if (ctx !== null) {
+        ctx.save();
+        ctx.canvas.width = g.image_width * g.zoom;
+        ctx.canvas.height = g.image_height * g.zoom;
+        ctx.scale(g.zoom, g.zoom);
+        ctx.restore();
+        ctx.drawImage(originalCanvas, 0, 0);
+    }
+    else {
+        console.error("ctx not found");
+    }
+}
+// Event listeners for zoom in and out
+can.addEventListener('wheel', (event) => {
+    event.preventDefault();
+    if (event.deltaY < 0) {
+        zoomIn();
+    }
+    else {
+        zoomOut();
+    }
+});
 console.log("Started...");

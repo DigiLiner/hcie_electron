@@ -71,8 +71,14 @@ g.spray_density = 100;
 g.startX = 0;
 //Start position Y of mouse
 g.startY = 0;
-//Zoom factor of canvas
-g.zoom_factor = 2;
+//Calculated position X of mouse by Zoom
+g.pX = 0;
+//Calculated position Y of mouse by Zoom
+g.pY = 0;
+//Zoom of canvas
+g.zoom = 1;
+//Zoom factor for zoom in/out
+g.zoomFactor = 1.1;
 //Image width of original canvas
 g.image_width = 500;
 //Image height of original canvas

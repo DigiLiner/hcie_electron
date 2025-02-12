@@ -2,8 +2,8 @@
 function drawSpray(ctx, e) {
     const r = Math.floor(g.spray_radius / 4);
     for (let i = 0; i < g.spray_density; i++) {
-        const x2 = Math.floor(e.offsetX + gaussianRandom(0, r));
-        const y2 = Math.floor(e.offsetY + gaussianRandom(0, r));
+        const x2 = Math.floor(g.pX + gaussianRandom(0, r));
+        const y2 = Math.floor(g.pY + gaussianRandom(0, r));
         // x = int(x1 + random.gauss(0, r))
         //y = int(y1 + random.gauss(0, r))
         ctx.beginPath();

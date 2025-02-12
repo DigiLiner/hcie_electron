@@ -7,24 +7,24 @@ function drawPen(e, ctx) {
     //ctx.strokeStyle = gradient;
     ctx.beginPath();
     ctx.moveTo(g.startX, g.startY);
-    ctx.lineTo(e.offsetX, e.offsetY);
+    ctx.lineTo(g.pX, g.pY);
     ctx.stroke();
     //set ctx style gradient
     ctx.closePath();
-    g.startX = e.offsetX;
-    g.startY = e.offsetY;
+    g.startX = g.pX;
+    g.startY = g.pY;
     ctx.filter = "none";
 }
 function drawLine(e, ctx) {
     ctx.beginPath();
     ctx.moveTo(g.startX, g.startY);
-    ctx.lineTo(e.offsetX, e.offsetY);
+    ctx.lineTo(g.pX, g.pY);
     ctx.stroke();
 }
 function drawCircle(e, ctx) {
     console.log("drawCircle", e);
     ctx.beginPath();
-    const radius = Math.sqrt(Math.pow(e.offsetX - g.startX, 2) + Math.pow(e.offsetY - g.startY, 2));
+    const radius = Math.sqrt(Math.pow(g.pX - g.startX, 2) + Math.pow(g.pY - g.startY, 2));
     console.log("radius", radius);
     ctx.arc(g.startX, g.startY, radius, 0, Math.PI * 2);
     ctx.stroke();
